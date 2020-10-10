@@ -1,40 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
+import {Provider} from "react-redux";
 import {createStore} from "redux";
+import rootReducer from "./rootReducer";
+import {composeWithDevTools} from "redux-devtools-extension";
+import Toggle from "./Toggle";
+
+const store = createStore(
+  rootReducer,
+  {},
+  composeWithDevTools(),
+  )
 
 class App extends Component {
   render(){
     return (
-      <div className="App">Redux test</div>
+      <Provider store={store}>
+        <div className="App">Redux test</div>
+        <Toggle />
+      </Provider>
     );
   }
 }
 
 export default App;
 
-const defaultState = {
-  welcome: "Hi",
-  otherState: "some stuff"
-}
-
-const greetings = (state = defaultState, action) => {
-  switch(action.type){
-    case "GREET_ME":
-      return {...state, welcome: `Hello ${action.result}`}
-    case "GREET_WORLD":
-      return {...state, welcome: "Hello World"}
-    default: 
-      return state;
-  }
-}
-
-const store = createStore(greetings)
-
-const result = "Some random API"
-store.dispatch({
-  type: "GREET_ME",
-  result
-})
-
-
-console.log(store.getState())
